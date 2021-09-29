@@ -96,8 +96,11 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Controller\AdminController.cs" />
+        <Compile Include="Controller\IAdminController.cs" />
+        <Compile Include="Controller\IUserController.cs" />
         <Compile Include="Controller\UserController.cs" />
         <Compile Include="Entity\Account.cs" />
+        <Compile Include="Entity\Admin.cs" />
         <Compile Include="Entity\TransactionHistory.cs" />
         <Compile Include="Model\AccountModel.cs" />
         <Compile Include="Model\IAccountModel.cs" />
@@ -105,7 +108,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Util\Hash.cs" />
         <Compile Include="View\AdminView.cs" />
-        <Compile Include="View\GuestView.cs" />
+        <Compile Include="View\SHBankMenu.cs" />
         <Compile Include="View\UserView.cs" />
     </ItemGroup>
     <ItemGroup>
