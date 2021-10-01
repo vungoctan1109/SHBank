@@ -7,12 +7,12 @@ namespace SHBank.Controller
         Account Register();
         Account Login();
         void ShowInformation();
-        void Withdraw();
-        void Deposit();
+        void Withdraw(Account account);
+        void Deposit(Account account);
         void Transfer(Account account);
-        void CheckInformation();
-        void UpdateInformation();
-        void ChangePassword();
+        void CheckBalance(Account account);
+        void UpdateInformation(Account account);
+        void ChangePassword(Account account);
         void CheckTransactionHistory();
     }
 }

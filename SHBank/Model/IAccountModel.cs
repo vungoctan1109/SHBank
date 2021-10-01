@@ -7,7 +7,9 @@ namespace SHBank.Model
     public interface IAccountModel
     {
         Account Save(Account account);
-        bool Update(string accountNumber, Account updateAccount);
+        bool Update(Account updateAccount);
+        void UpdateAmount(Account account);
+        bool UpdatePassword(Account account);
         bool Delete(int id);
         
         Account FindByAccountNumber(string accountNumber);

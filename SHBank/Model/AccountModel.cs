@@ -14,6 +14,9 @@ namespace SHBank.Model
 
         private readonly string _selectByAccountNumberCommand = $"SELECT * FROM accounts WHERE account_number = @account_number";
         private readonly string _selectByUsernameCommand = $"SELECT * FROM accounts WHERE username = @username";
+        private readonly string _updateAmountCommand = $"UPDATE accounts SET balance = @balance, updated_at = @updated_at WHERE account_number = @account_number";
+        private readonly string _updateInformationCommand = $"UPDATE accounts SET first_name = @first_name, last_name = @last_name, dob = @dob, email = @email, phone = @phone, address = @address, updated_at = @updated_at WHERE account_number = @account_number";
+        private readonly string _updatePasswordCommand = $"UPDATE accounts SET password_hash = @password_hash, salt = @salt, updated_at = @updated_at WHERE account_number = @account_number";
 
         public Account Save(Account account)
         {
@@ -56,11 +59,85 @@ namespace SHBank.Model
             return null;
         }
 
-        public bool Update(string accountNumber, Account updateAccount)
+        public bool Update(Account updateAccount)
         {
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_updateInformationCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@first_name", updateAccount.FirstName);
+                    mySqlCommand.Parameters.AddWithValue("@last_name", updateAccount.LastName);
+                    mySqlCommand.Parameters.AddWithValue("@dob", updateAccount.Dob);
+                    mySqlCommand.Parameters.AddWithValue("@email", updateAccount.Email);
+                    mySqlCommand.Parameters.AddWithValue("@phone", updateAccount.Phone);
+                    mySqlCommand.Parameters.AddWithValue("@address", updateAccount.Address);
+                    mySqlCommand.Parameters.AddWithValue("@updated_at", DateTime.Now);
+                    mySqlCommand.Parameters.AddWithValue("@account_number", updateAccount.AccountNumber);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             return true;
         }
         
+        public void UpdateAmount(Account account)
+        {
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    account.UpdatedAt = DateTime.Now;
+                    var mySqlCommand = new MySqlCommand(_updateAmountCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@balance", account.Balance);
+                    mySqlCommand.Parameters.AddWithValue("@updated_at", account.UpdatedAt);
+                    mySqlCommand.Parameters.AddWithValue("@account_number", account.AccountNumber);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
+        public bool UpdatePassword(Account account)
+        {
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    account.UpdatedAt = DateTime.Now;
+                    var mySqlCommand = new MySqlCommand(_updatePasswordCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@password_hash", account.PasswordHash);
+                    mySqlCommand.Parameters.AddWithValue("@salt", account.Salt);
+                    mySqlCommand.Parameters.AddWithValue("@updated_at", account.UpdatedAt);
+                    mySqlCommand.Parameters.AddWithValue("@account_number", account.AccountNumber);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
 
         public bool Delete(int id)
         {

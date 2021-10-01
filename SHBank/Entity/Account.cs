@@ -61,12 +61,12 @@ namespace SHBank.Entity
             }
             if (string.IsNullOrEmpty(this.FirstName))
             {
-                errors.Add("username", " Không được để trống tên.");
+                errors.Add("first_name", " Không được để trống tên.");
             }
             
             if (string.IsNullOrEmpty(this.LastName))
             {
-                errors.Add("username", "Không được để trống họ và tên đệm.");
+                errors.Add("last_name", "Không được để trống họ và tên đệm.");
             }
 
             if (this.Gender < 1 && this.Gender > 2 )
@@ -109,6 +109,33 @@ namespace SHBank.Entity
                 errors.Add("username", "Password không được để trống.");
             }
 
+            return errors;
+        }
+        public Dictionary<string, string> CheckValidUpdate()
+        {
+            var errors = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(this.FirstName))
+            {
+                errors.Add("username", " Không được để trống tên.");
+            }
+            
+            if (string.IsNullOrEmpty(this.LastName))
+            {
+                errors.Add("username", "Không được để trống họ và tên đệm.");
+            }
+            if (string.IsNullOrEmpty(this.Email))
+            {
+                errors.Add("email", "Không được để trống email.");
+            }
+            if (string.IsNullOrEmpty(this.Phone))
+            {
+                errors.Add("phone", "Không được để trống số điện thoai.");
+            }
+            
+            if (string.IsNullOrEmpty(this.Address))
+            {
+                errors.Add("address", "Không được để trống địa chỉ.");
+            }
             return errors;
         }
 

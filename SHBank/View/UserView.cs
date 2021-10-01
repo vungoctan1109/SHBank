@@ -33,18 +33,22 @@ namespace SHBank.View
                 switch (choice)
                 {
                     case 1:
-                        
+                        _userController.Deposit(account);
                         break;
                     case 2:
+                        _userController.Withdraw(account);
                         break;
                     case 3:
                         _userController.Transfer(account);
                         break;
                     case 4:
+                        _userController.CheckBalance(account);
                         break;
                     case 5:
+                        _userController.UpdateInformation(account);
                         break;
                     case 6:
+                        _userController.ChangePassword(account);
                         break;
                     case 7:
                         break;
