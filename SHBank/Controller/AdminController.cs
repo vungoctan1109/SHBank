@@ -145,6 +145,10 @@ namespace SHBank.Controller
                 AdminView userView = new AdminView();
                 userView.GenerateAdminView(existingAccount);
             }
+            else
+            {
+                Console.WriteLine("Mật khẩu tài khoản sai.");
+            }
             return null;
         }
         private Admin GetLoginInformation()

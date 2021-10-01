@@ -190,6 +190,7 @@ namespace SHBank.Controller
                     account.Balance -= amount;    
                     _accountModel.UpdateAmount(account);
                     Console.WriteLine("Rút tiền thành công. Số tiền trong tài khoản là {0}", account.Balance);
+                    _accountModel.Withdraw(account.AccountNumber, amount);
                 }
                 else
                 {
@@ -217,6 +218,7 @@ namespace SHBank.Controller
                     account.Balance += amount;
                     _accountModel.UpdateAmount(account);
                     Console.WriteLine("Gửi tiền thành công. Số tiền trong tài khoản là {0}", account.Balance);
+                    _accountModel.Deposit(account.AccountNumber, amount);
                 }
             }
             catch (FormatException e)
@@ -235,23 +237,26 @@ namespace SHBank.Controller
                 if (receiverAccount != null)
                 {
                     Console.WriteLine("Vui lòng nhập số tiền bạn cần gửi");
-                    var money = Convert.ToDouble(Console.ReadLine());
-                    if (money < 0)
+                    var amount = Convert.ToDouble(Console.ReadLine());
+                    if (amount < 0)
                     {
                         Console.WriteLine("Số tiền bạn muốn gửi không hợp lệ.");
                     }
-                    else if (account.Balance < money)
+                    else if (account.Balance < amount)
                     {
                         Console.WriteLine("Số tiền trong tài khoản không đủ để chuyển khoản.");
                     }
                     else
                     {
-                        account.Balance -= money;
-                        receiverAccount.Balance += money;
+                        Console.WriteLine("Bạn gửi tiền với lời nhắn là: ");
+                        var message = Console.ReadLine();
+                        account.Balance -= amount;
+                        receiverAccount.Balance += amount;
                         _accountModel.UpdateAmount(account);
                         _accountModel.UpdateAmount(receiverAccount);
                         Console.WriteLine("Chuyển khoản thành công.");
                         Console.WriteLine("Số dư còn lại trong tài khoản là {0}", account.Balance);
+                        _accountModel.Transfer(account.AccountNumber, receiverAccount.AccountNumber, message, amount);
                     }
                 }
                 else

@@ -17,7 +17,7 @@ namespace SHBank.Model
         private readonly string _updateAmountCommand = $"UPDATE accounts SET balance = @balance, updated_at = @updated_at WHERE account_number = @account_number";
         private readonly string _updateInformationCommand = $"UPDATE accounts SET first_name = @first_name, last_name = @last_name, dob = @dob, email = @email, phone = @phone, address = @address, updated_at = @updated_at WHERE account_number = @account_number";
         private readonly string _updatePasswordCommand = $"UPDATE accounts SET password_hash = @password_hash, salt = @salt, updated_at = @updated_at WHERE account_number = @account_number";
-
+        private readonly string _transactionCommand = $"INSERT INTO transaction_history(id, sender, receiver, type, amount, message, created_at, status) VALUES (@id, @sender, @receiver, @type, @amount, @message, @created_at, @status)";
         public Account Save(Account account)
         {
             try
@@ -263,19 +263,94 @@ namespace SHBank.Model
 
         public TransactionHistory Deposit(string accountNumber, double amount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var transactionHistory = new TransactionHistory();
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_transactionCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@id", transactionHistory.Id);
+                    mySqlCommand.Parameters.AddWithValue("@sender", accountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@receiver", accountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@type", 2);
+                    mySqlCommand.Parameters.AddWithValue("@amount", amount);
+                    mySqlCommand.Parameters.AddWithValue("@message", " ");
+                    mySqlCommand.Parameters.AddWithValue("@created_at", transactionHistory.CreatedAt);
+                    mySqlCommand.Parameters.AddWithValue("@status", 1);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                    return transactionHistory;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public TransactionHistory Withdraw(string accountNumber, double amount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var transactionHistory = new TransactionHistory();
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_transactionCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@id", transactionHistory.Id);
+                    mySqlCommand.Parameters.AddWithValue("@sender", accountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@receiver", accountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@type", 1);
+                    mySqlCommand.Parameters.AddWithValue("@amount", amount);
+                    mySqlCommand.Parameters.AddWithValue("@message", " ");
+                    mySqlCommand.Parameters.AddWithValue("@created_at", transactionHistory.CreatedAt);
+                    mySqlCommand.Parameters.AddWithValue("@status", 1);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                    return transactionHistory;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public TransactionHistory Transfer(string senderAccountNumber, string receiveAccountNumber, string message,
             double amount)
         {
             
-            throw new NotImplementedException();
+            try
+            {
+                var transactionHistory = new TransactionHistory();
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_transactionCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@id", transactionHistory.Id);
+                    mySqlCommand.Parameters.AddWithValue("@sender", senderAccountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@receiver", receiveAccountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@type", 3);
+                    mySqlCommand.Parameters.AddWithValue("@amount", amount);
+                    mySqlCommand.Parameters.AddWithValue("@message", message);
+                    mySqlCommand.Parameters.AddWithValue("@created_at", transactionHistory.CreatedAt);
+                    mySqlCommand.Parameters.AddWithValue("@status", 1);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                    return transactionHistory;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

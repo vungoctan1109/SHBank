@@ -66,7 +66,7 @@ namespace SHBank.View
                         }
                         break;
                     case 3:
-                        Console.WriteLine("Cảm ơn quý khách đã sử dụng dịch vụ của SH Bank.");
+                        Console.WriteLine("Tạm biệt.");
                         break;
                     default:
                         Console.WriteLine("Lựa chọn không hợp lệ. Mời quý khách chọn lại.");

@@ -13,5 +13,12 @@ namespace SHBank.Entity
         public string Message { get; set; }
         public DateTime CreatedAt { get; set; }
         public int Status { get; set; }
+
+        public TransactionHistory()
+        {
+            Id = Guid.NewGuid().ToString();
+            CreatedAt = DateTime.Now;
+            Status = 1;
+        }
     }
 }
