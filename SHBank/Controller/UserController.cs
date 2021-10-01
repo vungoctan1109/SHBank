@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using SHBank.Entity;
 using SHBank.Model;
@@ -28,6 +29,7 @@ namespace SHBank.Controller
                 {
                     errors.Add("username_duplicate", "Username đã tồn tại.");
                 }
+
                 isValid = errors.Count == 0;
                 if (!isValid)
                 {
@@ -45,6 +47,7 @@ namespace SHBank.Controller
             {
                 account.GenerateAccountNumber();
             }
+
             Console.WriteLine(account.ToString());
             account.EncryptPassword();
             var result = _accountModel.Save(account);
@@ -62,7 +65,7 @@ namespace SHBank.Controller
         {
             return _accountModel.FindByAccountNumber(accountNumber) != null;
         }
-        
+
         private Account GetAccountInformation()
         {
             Console.Clear();
@@ -108,7 +111,7 @@ namespace SHBank.Controller
                     Console.WriteLine("Vui lòng nhập lại đúng format mm/dd/yyyy.");
                 }
             }
-            
+
             Console.WriteLine("Vui lòng nhập giới tính của bạn: 1. Nam   2. Nữ");
             while (isNotValidGender)
             {
@@ -122,6 +125,7 @@ namespace SHBank.Controller
                     Console.WriteLine("Hãy nhập số 1 hoặc 2.");
                 }
             }
+
             Console.WriteLine("Vui lòng nhập email: ");
             account.Email = Console.ReadLine();
             Console.WriteLine("Vui lòng nhập số CMND/CCCD: ");
@@ -155,12 +159,14 @@ namespace SHBank.Controller
             } while (!isValid);
 
             Account existingAccount = _accountModel.FindByUsername(account.Username);
-            if (existingAccount != null && Hash.ComparePassword(account.Password, existingAccount.Salt, existingAccount.PasswordHash))
+            if (existingAccount != null &&
+                Hash.ComparePassword(account.Password, existingAccount.Salt, existingAccount.PasswordHash))
             {
                 Console.WriteLine("Đăng nhập thành công.");
                 UserView userView = new UserView();
                 userView.GenerateUserView(existingAccount);
             }
+
             return null;
         }
 
@@ -187,7 +193,7 @@ namespace SHBank.Controller
                 var amount = Convert.ToDouble(Console.ReadLine());
                 if (account.Balance > amount && amount > 0)
                 {
-                    account.Balance -= amount;    
+                    account.Balance -= amount;
                     _accountModel.UpdateAmount(account);
                     Console.WriteLine("Rút tiền thành công. Số tiền trong tài khoản là {0}", account.Balance);
                     _accountModel.Withdraw(account.AccountNumber, amount);
@@ -202,14 +208,14 @@ namespace SHBank.Controller
                 Console.WriteLine("Số tiền quý khách nhập không hợp lệ.");
             }
         }
-        
+
         public void Deposit(Account account)
         {
             try
             {
                 Console.WriteLine("Vui lòng nhập số tiền bạn muốn gửi ngân hàng: ");
                 var amount = Convert.ToDouble(Console.ReadLine());
-                if (amount < 0 )
+                if (amount < 0)
                 {
                     Console.WriteLine("Số tiền nhập không hợp lệ. Mong quý khách kiểm tra lại.");
                 }
@@ -227,7 +233,7 @@ namespace SHBank.Controller
             }
         }
 
-        public void Transfer( Account account)
+        public void Transfer(Account account)
         {
             try
             {
@@ -268,7 +274,6 @@ namespace SHBank.Controller
             {
                 Console.WriteLine("Số tiền quý khách nhập không hợp lệ.");
             }
-
         }
 
         public void CheckBalance(Account account)
@@ -301,7 +306,7 @@ namespace SHBank.Controller
                 Console.WriteLine("Cập nhật thông tin thành công.");
             }
         }
-        
+
         private Account GetUpdateInformation(Account account)
         {
             var isNotValidDob = true;
@@ -323,6 +328,7 @@ namespace SHBank.Controller
                     Console.WriteLine("Vui lòng nhập lại đúng format mm/dd/yyyy.");
                 }
             }
+
             Console.WriteLine("Vui lòng nhập email: ");
             account.Email = Console.ReadLine();
             Console.WriteLine("Vui lòng nhập số điện thoại: ");
@@ -331,6 +337,7 @@ namespace SHBank.Controller
             account.Address = Console.ReadLine();
             return account;
         }
+
         public void ChangePassword(Account account)
         {
             Console.WriteLine("Vui lòng nhập password hiện tại: ");
@@ -362,9 +369,20 @@ namespace SHBank.Controller
             }
         }
 
-        public void CheckTransactionHistory()
+        public void CheckTransactionHistory(Account account)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Vui lòng nhập thời gian bắt đầu: ");
+            var startTime = Convert.ToDateTime(Console.ReadLine());
+            Console.WriteLine("Vui lòng nhập thời gian kết thúc: ");
+            var endTime = Convert.ToDateTime(Console.ReadLine());
+            var transactionHistories = new List<TransactionHistory>();
+            transactionHistories = _accountModel.FindTransactionHistory(account.AccountNumber, startTime, endTime);
+            foreach (var transactionHistory in transactionHistories)
+            {
+                Console.WriteLine(String.Format("|{0,37}|{1,37}|{2,37}|{3,4}|{4,10}|{5,15}|{6,22}|{7,6}|", "ID", "Sender Account Number", "Receiver Account Number", "Type", "Amount", "Message", "Created At", "Status"));
+                Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                Console.WriteLine(transactionHistory.ToString());
+            }
         }
     }
 }

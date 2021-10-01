@@ -13,6 +13,6 @@ namespace SHBank.Controller
         void CheckBalance(Account account);
         void UpdateInformation(Account account);
         void ChangePassword(Account account);
-        void CheckTransactionHistory();
+        void CheckTransactionHistory(Account account);
     }
 }

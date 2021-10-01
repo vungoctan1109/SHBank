@@ -18,6 +18,7 @@ namespace SHBank.Model
         private readonly string _updateInformationCommand = $"UPDATE accounts SET first_name = @first_name, last_name = @last_name, dob = @dob, email = @email, phone = @phone, address = @address, updated_at = @updated_at WHERE account_number = @account_number";
         private readonly string _updatePasswordCommand = $"UPDATE accounts SET password_hash = @password_hash, salt = @salt, updated_at = @updated_at WHERE account_number = @account_number";
         private readonly string _transactionCommand = $"INSERT INTO transaction_history(id, sender, receiver, type, amount, message, created_at, status) VALUES (@id, @sender, @receiver, @type, @amount, @message, @created_at, @status)";
+        private readonly string _selectTransactionCommand = $"SELECT * FROM transaction_history WHERE sender = @sender OR receiver = @receiver";
         public Account Save(Account account)
         {
             try
@@ -256,9 +257,47 @@ namespace SHBank.Model
         }
 
         public List<TransactionHistory> FindTransactionHistory(string accountNumber, DateTime startTime,
-            DateTime endTime, int page, int limit)
+            DateTime endTime)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_selectTransactionCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@sender", accountNumber);
+                    mySqlCommand.Parameters.AddWithValue("@receiver", accountNumber);
+                    mySqlCommand.Prepare();
+                    List<TransactionHistory> transactionHistories = new List<TransactionHistory>(); 
+                    using (var reader = mySqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var transactionHistory = new TransactionHistory()
+                            {
+                                Id = reader.GetString("id"),
+                                SenderAccountNumber = reader.GetString("sender"),
+                                ReceiverAccountNumber = reader.GetString("receiver"),
+                                Type = reader.GetInt32("type"),
+                                Amount = reader.GetDouble("amount"),
+                                Message = reader.GetString("message"),
+                                CreatedAt = reader.GetDateTime("created_at"),
+                                Status = reader.GetInt32("status")
+                            };
+                            if (DateTime.Compare(startTime, transactionHistory.CreatedAt) <= 0 && DateTime.Compare(endTime, transactionHistory.CreatedAt) >= 0)
+                            {
+                                transactionHistories.Add(transactionHistory);    
+                            }
+                        }
+                        return transactionHistories;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public TransactionHistory Deposit(string accountNumber, double amount)

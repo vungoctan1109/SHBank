@@ -21,8 +21,7 @@ namespace SHBank.Model
         List<TransactionHistory> FindTransactionHistory(
             string accountNumber,
             DateTime startTime,
-            DateTime endTime,
-            int page, int limit);
+            DateTime endTime);
 
         TransactionHistory Deposit(string accountNumber, double amount);
         TransactionHistory Withdraw(string accountNumber, double amount);

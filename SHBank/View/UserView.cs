@@ -51,6 +51,7 @@ namespace SHBank.View
                         _userController.ChangePassword(account);
                         break;
                     case 7:
+                        _userController.CheckTransactionHistory(account);
                         break;
                     case 8:
                         Console.WriteLine("Cảm ơn quý khách đã sử dụng dịch vụ của SH Bank.");
