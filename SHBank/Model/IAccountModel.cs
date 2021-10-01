@@ -6,7 +6,7 @@ namespace SHBank.Model
 {
     public interface IAccountModel
     {
-        bool Save(Account account);
+        Account Save(Account account);
         bool Update(int id, Account updateAccount);
         bool Delete(int id);
         

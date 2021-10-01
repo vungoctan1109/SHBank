@@ -7,9 +7,9 @@ namespace SHBank.View
     {
         private IAdminController _adminController;
 
-        public AdminView(IAdminController adminController)
+        public AdminView()
         {
-            _adminController = adminController;
+            _adminController = new AdminController();
         }
 
         public void GenerateAdminView()
@@ -70,6 +70,7 @@ namespace SHBank.View
                                 Console.WriteLine("Vui lòng nhập lại lựa chọn của bạn.");
                                 break;
                         }
+
                         break;
                     case 8:
                         _adminController.SearchTransactionHistory();
