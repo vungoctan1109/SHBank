@@ -9,7 +9,7 @@ namespace SHBank.Controller
         void ShowInformation();
         void Withdraw();
         void Deposit();
-        void Transfer();
+        void Transfer(Account account);
         void CheckInformation();
         void UpdateInformation();
         void ChangePassword();

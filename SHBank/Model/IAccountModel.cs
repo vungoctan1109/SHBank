@@ -7,10 +7,11 @@ namespace SHBank.Model
     public interface IAccountModel
     {
         Account Save(Account account);
-        bool Update(int id, Account updateAccount);
+        bool Update(string accountNumber, Account updateAccount);
         bool Delete(int id);
         
-        Account FindByAccountNumber(int id);
+        Account FindByAccountNumber(string accountNumber);
+        Account FindByUsername(string username);
         List<Account> FindAll(int page, int limit);
         List<Account> SearchByName(string name, int page, int limit);
         List<Account> SearchByPhone(string phone, int page, int limit);

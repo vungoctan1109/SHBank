@@ -103,7 +103,9 @@
         <Compile Include="Entity\Admin.cs" />
         <Compile Include="Entity\TransactionHistory.cs" />
         <Compile Include="Model\AccountModel.cs" />
+        <Compile Include="Model\AdminModel.cs" />
         <Compile Include="Model\IAccountModel.cs" />
+        <Compile Include="Model\IAdminModel.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Util\ConnectionHelper.cs" />

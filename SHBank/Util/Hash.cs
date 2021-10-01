@@ -54,5 +54,10 @@ namespace SHBank.Util
             return byteArrayResult;
         }
 
+        public static bool ComparePassword(string input, string salt, string passwordHash)
+        {
+            return GenerateSaltedSHA1(input, salt).Equals(passwordHash);
+        }
+
     }
 }

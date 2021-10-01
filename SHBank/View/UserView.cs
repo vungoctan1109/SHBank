@@ -1,15 +1,24 @@
 ﻿using System;
+using SHBank.Controller;
+using SHBank.Entity;
 
 namespace SHBank.View
 {
     public class UserView
     {
-        public void GenerateUserView()
+        private IUserController _userController;
+
+        public UserView()
+        {
+            _userController = new UserController();
+        }
+
+        public void GenerateUserView(Account account)
         {
             while (true)
             {
                 Console.WriteLine("—— Ngân hàng Spring Hero Bank ——");
-                Console.WriteLine("Chào mừng “Xuân Hùng” quay trở lại. Vui lòng chọn thao tác.");
+                Console.WriteLine("Chào mừng “{0}” quay trở lại. Vui lòng chọn thao tác.", account.FirstName);
                 Console.WriteLine("1. Gửi tiền.");
                 Console.WriteLine("2. Rút tiền.");
                 Console.WriteLine("3. Chuyển khoản.");
@@ -24,10 +33,12 @@ namespace SHBank.View
                 switch (choice)
                 {
                     case 1:
+                        
                         break;
                     case 2:
                         break;
                     case 3:
+                        _userController.Transfer(account);
                         break;
                     case 4:
                         break;

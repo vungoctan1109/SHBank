@@ -1,5 +1,6 @@
 ﻿using System;
 using SHBank.Controller;
+using SHBank.Entity;
 
 namespace SHBank.View
 {
@@ -12,12 +13,12 @@ namespace SHBank.View
             _adminController = new AdminController();
         }
 
-        public void GenerateAdminView()
+        public void GenerateAdminView(Admin admin)
         {
             while (true)
             {
                 Console.WriteLine("—— Ngân hàng Spring Hero Bank ——");
-                Console.WriteLine("Chào mừng Admin “Xuân Hùng” quay trở lại. Vui lòng chọn thao tác.");
+                Console.WriteLine("Chào mừng Admin “{0}” quay trở lại. Vui lòng chọn thao tác.", admin.FirstName);
                 Console.WriteLine("1. Danh sách người sử dụng.");
                 Console.WriteLine("2. Danh sách lịch sử giao dịch.");
                 Console.WriteLine("3. Tìm kiếm người dùng theo tên.");

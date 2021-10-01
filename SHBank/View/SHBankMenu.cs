@@ -8,10 +8,10 @@ namespace SHBank.View
         private IAdminController _adminController;
         private IUserController _userController;
 
-        public SHBankMenu(IAdminController adminController, IUserController userController)
+        public SHBankMenu()
         {
-            this._adminController = adminController;
-            this._userController = userController;
+            _adminController = new AdminController();
+            _userController = new UserController();
         }
 
         public void GenerateMenu()
