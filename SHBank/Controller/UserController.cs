@@ -66,6 +66,7 @@ namespace SHBank.Controller
 
         public void Withdraw()
         {
+            Console.WriteLine("Something.");
             throw new System.NotImplementedException();
         }
 
