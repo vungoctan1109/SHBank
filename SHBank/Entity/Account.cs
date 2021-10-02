@@ -149,6 +149,11 @@ namespace SHBank.Entity
         {
             AccountNumber = Guid.NewGuid().ToString();
         }
-        
+
+        public override string ToString()
+        {
+            return String.Format("|{0,37}|{1,13}|{2,10}|{3,10}|{4,10}|{5,22}|{6,6}|{7,15}|{8,12}|{9,11}|{10,15}", 
+                AccountNumber, Balance, Username, FirstName, LastName, Dob, Gender, Email, IdentityNumber, Phone, Address);
+        }
     }
 }

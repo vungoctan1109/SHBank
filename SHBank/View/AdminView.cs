@@ -45,10 +45,10 @@ namespace SHBank.View
                         _adminController.FindUserByName();
                         break;
                     case 4:
-                        _adminController.FindUserByPhone();
+                        _adminController.FindUserByAccountNumber();
                         break;
                     case 5:
-                        _adminController.FindUserByAccountNumber();
+                        _adminController.FindUserByPhone();
                         break;
                     case 6:
                         _adminController.CreateNewUser();
@@ -77,10 +77,10 @@ namespace SHBank.View
                         _adminController.SearchTransactionHistory();
                         break;
                     case 9:
-                        _adminController.UpdateInformation();
+                        _adminController.UpdateInformation(admin);
                         break;
                     case 10:
-                        _adminController.ChangePassword();
+                        _adminController.ChangePassword(admin);
                         break;
                     case 11:
                         Console.WriteLine("Đã chấm dứt phiên làm việc.");

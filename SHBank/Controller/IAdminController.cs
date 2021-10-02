@@ -15,7 +15,7 @@ namespace SHBank.Controller
         void LockUser();
         void UnlockUser();
         void SearchTransactionHistory();
-        void UpdateInformation();
-        void ChangePassword();
+        void UpdateInformation(Admin admin);
+        void ChangePassword(Admin admin);
     }
 }

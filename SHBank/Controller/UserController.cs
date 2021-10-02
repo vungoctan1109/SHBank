@@ -66,7 +66,7 @@ namespace SHBank.Controller
             return _accountModel.FindByAccountNumber(accountNumber) != null;
         }
 
-        private Account GetAccountInformation()
+        public Account GetAccountInformation()
         {
             Console.Clear();
             var isNotValidDob = true;
@@ -375,13 +375,19 @@ namespace SHBank.Controller
             var startTime = Convert.ToDateTime(Console.ReadLine());
             Console.WriteLine("Vui lòng nhập thời gian kết thúc: ");
             var endTime = Convert.ToDateTime(Console.ReadLine());
-            var transactionHistories = new List<TransactionHistory>();
-            transactionHistories = _accountModel.FindTransactionHistory(account.AccountNumber, startTime, endTime);
-            foreach (var transactionHistory in transactionHistories)
+            var transactionHistories = _accountModel.FindTransactionHistory(account.AccountNumber, startTime, endTime);
+            if (transactionHistories != null)
             {
                 Console.WriteLine(String.Format("|{0,37}|{1,37}|{2,37}|{3,4}|{4,10}|{5,15}|{6,22}|{7,6}|", "ID", "Sender Account Number", "Receiver Account Number", "Type", "Amount", "Message", "Created At", "Status"));
                 Console.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                Console.WriteLine(transactionHistory.ToString());
+                foreach (var transactionHistory in transactionHistories)
+                {
+                    Console.WriteLine(transactionHistory.ToString());
+                }    
+            }
+            else
+            {
+                Console.WriteLine("Không tồn tại giao dịch nào với thời gian như trên.");
             }
         }
     }

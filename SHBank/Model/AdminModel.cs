@@ -12,6 +12,8 @@ namespace SHBank.Model
             $"VALUES (@account_number, @username, @password_hash, @salt, @first_name, @last_name, @dob, @gender, @email, @identity_number, @phone, @address, @created_at, @updated_at)";
         private readonly string _selectByAccountNumberCommand = $"SELECT * FROM admins WHERE account_number = @account_number";
         private readonly string _selectByUsernameCommand = $"SELECT * FROM admins WHERE username = @username";
+        private readonly string _updateInformationCommand = $"UPDATE admins SET first_name = @first_name, last_name = @last_name, dob = @dob, email = @email, phone = @phone, address = @address, updated_at = @updated_at WHERE account_number = @account_number";
+        private readonly string _updatePasswordCommand = $"UPDATE admins SET password_hash = @password_hash, salt = @salt, updated_at = @updated_at WHERE account_number = @account_number";
         public Admin Save(Admin admin)
         {
             try
@@ -49,10 +51,60 @@ namespace SHBank.Model
             }
             return null;
         }
+        
 
-        public bool Update(string accountNumber, Admin updateAccount)
+        public bool Update(Admin updateAccount)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_updateInformationCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@first_name", updateAccount.FirstName);
+                    mySqlCommand.Parameters.AddWithValue("@last_name", updateAccount.LastName);
+                    mySqlCommand.Parameters.AddWithValue("@dob", updateAccount.Dob);
+                    mySqlCommand.Parameters.AddWithValue("@email", updateAccount.Email);
+                    mySqlCommand.Parameters.AddWithValue("@phone", updateAccount.Phone);
+                    mySqlCommand.Parameters.AddWithValue("@address", updateAccount.Address);
+                    mySqlCommand.Parameters.AddWithValue("@updated_at", DateTime.Now);
+                    mySqlCommand.Parameters.AddWithValue("@account_number", updateAccount.AccountNumber);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public bool UpdatePassword(Admin account)
+        {
+            try
+            {
+                using (var cnn = ConnectionHelper.GetInstance())
+                {
+                    cnn.Open();
+                    var mySqlCommand = new MySqlCommand(_updatePasswordCommand, cnn);
+                    mySqlCommand.Parameters.AddWithValue("@password_hash", account.PasswordHash);
+                    mySqlCommand.Parameters.AddWithValue("@salt", account.Salt);
+                    mySqlCommand.Parameters.AddWithValue("@updated_at", DateTime.Now);
+                    mySqlCommand.Parameters.AddWithValue("@account_number", account.AccountNumber);
+                    mySqlCommand.Prepare();
+                    mySqlCommand.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
         }
 
         public Admin FindByUsername(string username)
